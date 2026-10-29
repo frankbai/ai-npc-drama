@@ -1,0 +1,8 @@
+# 本机数据：存档、对话、模型配置（里面有密钥），不要提交
+local-data/
+.env
+
+__pycache__/
+*.pyc
+.DS_Store
+.venv/

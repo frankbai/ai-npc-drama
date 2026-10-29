@@ -1,0 +1,5 @@
+{"id": "alpha", "name": "阿尔", "title": "阿尔兄", "place": "东屋", "from_chapter": 1,
+ "expressions": {"calm": "平静", "smile": "笑"}, "inner": {"mode": "always"},
+ "bond_start": {"trust": 1, "warmth": 2}, "quote_topics": ["井"],
+ "relays": [{"to": "beta", "from_stage": 1, "what": "什么都告诉贝塔。", "certainty": "低"}],
+ "var_notes": [{"var": "暴露", "min": 1, "text": "你听说{名}身手不凡。"}]}

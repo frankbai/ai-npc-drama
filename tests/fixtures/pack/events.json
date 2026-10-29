@@ -1,0 +1,8 @@
+{"events": [
+ {"id": "biz", "group": "经营", "chapters": [1, 2], "label": "做生意", "note": "赚了钱。",
+  "knows": {"*": {"how": "heard", "source": "街坊", "certainty": "中", "text": "{名}赚了钱。"}}},
+ {"id": "biz2", "group": "经营", "chapters": [1, 2], "label": "再做生意", "note": "又赚了。"},
+ {"id": "pick", "group": "意外", "chapters": [1, 2], "once": true, "label": "有人摔倒", "intro": "怎么办？",
+  "choices": [{"id": "act", "label": "扶", "note": "扶起来了。", "set": {"暴露": 1}, "gives": ["k5"]}, {"id": "no", "label": "不扶", "note": "走了。"}]},
+ {"id": "news", "group": "意外", "chapters": [1, 2], "label": "消息", "note": "", "special": "rumors"}
+]}

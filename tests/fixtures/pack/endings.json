@@ -1,0 +1,8 @@
+{"accuse": {"chapter": 2, "suspects": [{"id": "alpha", "name": "阿尔"}, {"id": "beta", "name": "贝塔"}], "culprit": "beta", "pick": 3, "pass": 4},
+ "bond": {"npc": "alpha", "peak_until": 1, "measure": ["trust", "warmth"]},
+ "parts": {"common": [{"who": "narr", "text": "你摆出了：{证据}，指认了{凶手}。"}]},
+ "endings": [
+  {"id": "good", "title": "好", "if": {"all": [{"accused_right": true}, {"score": [">=", 4]}, {"bond": [">=", 10]}]}, "phases": [{"type": "script", "include": "common"}]},
+  {"id": "ok", "title": "还行", "if": {"all": [{"accused_right": true}, {"score": [">=", 4]}]}, "phases": [{"type": "script", "include": "common"}]},
+  {"id": "bad", "title": "坏", "if": "else", "phases": [{"type": "script", "lines": [{"who": "beta", "slot": "s_beta", "reveal": true, "expr": "cold", "instruction": "冷笑"}]}]}
+ ]}

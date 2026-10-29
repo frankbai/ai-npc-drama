@@ -1,0 +1,3 @@
+{"id": "beta", "name": "贝塔", "title": "贝塔", "place": "西屋", "from_chapter": 2,
+ "expressions": {"calm": "平静", "cold": "冷笑"}, "hidden_expressions": ["cold"],
+ "inner": {"mode": "trust", "min": 5, "label": "看不透她"}, "bond_start": {"trust": 0, "warmth": 0}}

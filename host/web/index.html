@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI NPC Demo</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="seal" id="seal">·</span><div><b id="brandTitle"></b><small id="brandSub"></small></div></div>
+  <div class="chapter"><span id="chLabel"></span><span id="chTitle"></span></div>
+  <div class="top-actions">
+    <label class="who">存档 <select id="player"></select></label>
+    <button id="newPlayer" class="ghost">＋ 新存档</button>
+    <button id="nextChapter" hidden>进入下一段时日 →</button>
+    <button id="accuseBtn" class="danger" hidden>当众指认 →</button>
+    <button id="endingBtn" class="ghost" hidden>重看结局</button>
+    <button id="usageBtn" class="ghost" hidden>用量</button>
+    <button id="settingsBtn" class="ghost" hidden title="模型设置"><span id="modeDot"></span>模型</button>
+    <button id="mindBtn" class="ghost" hidden>心智面板</button>
+  </div>
+</header>
+
+<main class="layout">
+  <aside class="side left">
+    <section>
+      <h3 id="peopleTitle">人物</h3>
+      <div class="lamp"><span class="wick"><i id="lampBar"></i></span><span id="lampText" class="wick-text"></span></div>
+      <div id="people" class="people"></div>
+      <button id="replayBtn" class="ghost small full">重温本章剧情</button>
+    </section>
+    <div id="eventGroups"></div>
+    <section>
+      <h3 id="cluesTitle">线索簿</h3>
+      <ul id="clues" class="plain clues"></ul>
+    </section>
+    <section>
+      <h3 id="journalTitle">我的手记</h3>
+      <ul id="journal" class="plain journal"></ul>
+    </section>
+  </aside>
+
+  <section class="stage">
+    <div class="scene" id="scene"></div>
+    <div class="bondbar" id="bondbar" hidden></div>
+    <div class="log" id="log"></div>
+    <div class="controls" id="controls" hidden>
+      <div class="options" id="options"></div>
+      <div class="gestures" id="gestures"></div>
+      <form class="input" id="form">
+        <input id="text" autocomplete="off" maxlength="300" placeholder="也可以自己说……">
+        <button type="submit">说</button>
+        <button type="button" id="leave" class="ghost">告辞</button>
+      </form>
+    </div>
+  </section>
+
+  <aside class="side right" id="mind" hidden>
+    <div class="mind-head"><h3>心智面板</h3><button class="ghost small" id="refreshMind">刷新</button></div>
+    <p class="hint">作者视角：NPC 对<b>当前存档</b>的记忆与状态。</p>
+    <div class="tabs" id="mindTabs"></div>
+    <div id="mindBody"></div>
+  </aside>
+</main>
+
+<!-- 全屏 CG -->
+<div id="cg" class="cg" hidden>
+  <div class="cg-art" id="cgArt">
+    <img id="cgImg" alt="">
+    <div class="cg-placeholder" id="cgPh"><span id="cgPhLabel"></span><b id="cgPhTitle"></b><small>（临时场景卡 · 插画放进 content/assets/cg/ 后自动替换）</small></div>
+  </div>
+  <div class="cg-box" id="cgBox">
+    <div class="cg-script" id="cgScript">
+      <span class="cg-av" id="cgAv" hidden></span>
+      <div class="cg-lines">
+        <div class="cg-who" id="cgWho"></div>
+        <div class="cg-text" id="cgText"></div>
+        <div class="cg-hint" id="cgHint">点击继续 ▸</div>
+      </div>
+    </div>
+    <div class="cg-scene" id="cgScene" hidden>
+      <div class="cg-scene-head"><span id="cgSceneHead">这一幕由你们自己演完</span><span id="cgBeats"></span></div>
+      <div class="log" id="cgLog"></div>
+      <div class="options" id="cgOptions"></div>
+      <div class="gestures" id="cgGestures"></div>
+      <form class="input" id="cgForm">
+        <input id="cgInput" autocomplete="off" maxlength="300" placeholder="也可以自己说……">
+        <button type="submit">说</button>
+      </form>
+      <button id="cgSceneNext" class="full" hidden>继续 ▸</button>
+      <button id="cgSceneRetry" class="full" hidden>没接上，再试一次 ↻</button>
+    </div>
+  </div>
+  <button id="cgSkip" class="ghost small cg-skip" hidden>关闭回看</button>
+</div>
+
+<dialog id="playerDlg">
+  <form method="dialog" id="playerForm">
+    <h3>新的存档</h3>
+    <p class="hint intro" id="introText"></p>
+    <label><span id="nameLabel">你的名字</span><input name="name" required></label>
+    <label><span id="shopLabel">店名</span><input name="shop" required></label>
+    <div class="avpick-label">你是</div>
+    <div class="genders" id="genderPick"></div>
+    <div class="avpick-label">你的头像（不露脸）</div>
+    <div class="avpick" id="avPick"></div>
+    <menu><button value="cancel" class="ghost" formnovalidate>取消</button><button value="ok">开始</button></menu>
+  </form>
+</dialog>
+
+<dialog id="choiceDlg">
+  <form method="dialog" id="choiceForm">
+    <h3 id="choiceTitle"></h3>
+    <p id="choiceIntro"></p>
+    <div class="choices" id="choiceList"></div>
+    <menu><button value="cancel" class="ghost" formnovalidate>再想想</button></menu>
+  </form>
+</dialog>
+
+<dialog id="accuseDlg" class="wide">
+  <form method="dialog" id="accuseForm">
+    <h3 id="accuseTitle">指认</h3>
+    <p class="hint" id="accusePrompt"></p>
+    <div class="avpick-label">凶手是——</div>
+    <div class="suspects" id="suspectPick"></div>
+    <div class="avpick-label">摆出证据（最多 <b id="pickN">3</b> 条）</div>
+    <div class="evidence" id="evidencePick"></div>
+    <p class="hint" id="accuseErr"></p>
+    <menu><button value="cancel" class="ghost" formnovalidate>再想想</button><button value="ok" class="danger">就是他</button></menu>
+  </form>
+</dialog>
+
+<dialog id="epilogueDlg" class="wide">
+  <form method="dialog"><h3 id="epiTitle"></h3><div id="epiBody"></div><menu><button value="ok">好</button></menu></form>
+</dialog>
+
+<dialog id="loginDlg">
+  <form method="dialog" id="loginForm">
+    <h3 id="loginTitle">AI NPC Demo</h3>
+    <p class="hint" id="loginHint">请输入体验口令。</p>
+    <label>体验口令<input name="code" type="password" autocomplete="current-password" required></label>
+    <p class="hint" id="loginErr"></p>
+    <menu><button value="ok">进入</button></menu>
+  </form>
+</dialog>
+
+<dialog id="settingsDlg">
+  <form method="dialog" id="settingsForm">
+    <h3>模型设置</h3>
+    <label>模式
+      <select name="mode"><option value="mock">模拟（不调用模型，只看流程）</option><option value="live">真实模型</option></select>
+    </label>
+    <label>服务地址<input name="base_url" placeholder="https://api.openai.com/v1"></label>
+    <label>主模型<input name="model" placeholder="gpt-6.1-sol"></label>
+    <label>选项用的快模型（可空）<input name="fast_model"></label>
+    <label>推理强度（可空）<input name="reasoning_effort" placeholder="low"></label>
+    <label>密钥（留空表示不修改）<input name="api_key" type="password" autocomplete="off"></label>
+    <label class="check"><input type="checkbox" name="clear_key"> 清除已保存的密钥</label>
+    <p class="hint" id="keyState"></p>
+    <p class="hint">在这里改过的设置存进数据库，优先于服务器的环境变量。线上版的密钥请在部署平台的环境变量里改。</p>
+    <menu><button value="cancel" class="ghost" formnovalidate>取消</button><button value="ok">保存</button></menu>
+  </form>
+</dialog>
+
+<dialog id="usageDlg" class="wide"><form method="dialog"><h3>模型用量</h3><div id="usageBody"></div><menu><button value="ok">关闭</button></menu></form></dialog>
+<dialog id="promptDlg" class="wide"><form method="dialog"><h3>最近一轮的完整提示词</h3><pre id="promptBody"></pre><menu><button value="ok">关闭</button></menu></form></dialog>
+
+<div id="toast" class="toast" hidden></div>
+<div id="busy" class="busy" hidden><div><span class="spin"></span><span id="busyText">处理中……</span></div></div>
+<script src="/app.js"></script>
+</body>
+</html>

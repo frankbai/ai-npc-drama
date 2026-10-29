@@ -1,0 +1,58 @@
+# ============================================================================
+# Render 部署蓝图（免费方案）
+#
+# 会创建两样东西：
+#   1. ai-npc-drama-db  免费 PostgreSQL（1 GB，30 天后到期，存所有对话和记忆）
+#   2. ai-npc-drama     免费 Web 服务（15 分钟没人访问会休眠，再打开要等约 1 分钟）
+#
+# 用法：把这份代码放进你自己的 GitHub 仓库 → Render 控制台 New → Blueprint →
+#       选这个仓库 → 按提示填写下面标着【必填】的变量 → Deploy。
+# 详细步骤见 docs/部署到Render.md；每个变量的含义见 docs/配置说明.md。
+#
+# 部署后想改变量：Render 里点 ai-npc-drama 服务 → Environment，改完保存会自动重启。
+# ============================================================================
+
+databases:
+  - name: ai-npc-drama-db
+    plan: free
+    region: singapore            # 必须和下面的 Web 服务同一个区域
+
+services:
+  - type: web
+    name: ai-npc-drama           # 决定网址：https://ai-npc-drama-xxxx.onrender.com
+    runtime: python
+    plan: free
+    region: singapore            # 也可选 oregon / ohio / virginia / frankfurt，选离你的玩家和模型服务近的
+    buildCommand: echo "零依赖，无需安装"
+    startCommand: python run.py
+    healthCheckPath: /healthz
+    envVars:
+      # ---- 自动生成，不用管 ----
+      - key: DATABASE_URL        # 连接上面的数据库
+        fromDatabase:
+          name: ai-npc-drama-db
+          property: connectionString
+      - key: SESSION_SECRET      # 登录凭证的签名密钥，随机生成
+        generateValue: true
+
+      # ---- 【必填】创建时 Render 会逐个让你填 ----
+      - key: OPENAI_API_KEY      # 模型服务的密钥
+        sync: false
+      - key: NPC_BASE_URL        # 模型服务地址，兼容 Chat Completions 即可。OpenAI 官方填 https://api.openai.com/v1
+        sync: false
+      - key: NPC_MODEL           # 模型名，以你的模型服务实际支持的为准
+        sync: false
+      - key: ACCESS_CODE         # 体验口令：发给来玩的人，可以是中文
+        sync: false
+      - key: ADMIN_CODE          # 管理员口令：只有你自己知道，必须和体验口令不同
+        sync: false
+
+      # ---- 可选：有默认值，按需修改 ----
+      - key: NPC_REASONING_EFFORT  # 推理强度：low 回复快；medium 更深思但更慢。模型服务不认这个参数就改成 none
+        value: low
+      - key: SHOW_MIND           # 1 = 所有人都能看"心智面板"（会剧透）；0 = 只有管理员能看
+        value: "0"
+      - key: TURNS_PER_MINUTE    # 每个访客每分钟最多说几句（管理员不限）
+        value: "10"
+      - key: TURNS_PER_DAY       # 每个访客每天最多说几句（管理员不限）
+        value: "300"

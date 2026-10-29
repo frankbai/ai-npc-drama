@@ -1,0 +1,36 @@
+name: test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.12"]
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: npc
+          POSTGRES_PASSWORD: npc
+          POSTGRES_DB: npctest
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U npc"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: 内容包检查（结构 + 防剧透）
+        run: python tools/check_content.py
+      - name: 测试（模拟模式，SQLite + PostgreSQL）
+        env:
+          TEST_DATABASE_URL: postgresql://npc:npc@127.0.0.1:5432/npctest?sslmode=disable
+        run: python -m unittest discover -s tests -v

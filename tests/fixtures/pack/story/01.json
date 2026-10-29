@@ -1,0 +1,5 @@
+{"n": 1, "season": "春", "title": "一", "gap": "",
+ "npcs": {"alpha": {"stage": "初识。你叫{ta}朋友。", "anchor": {"situation": "春天", "must": [], "fallback": {"mood": "好", "doing": "种地"}}}},
+ "cg": {"title": "一", "phases": [{"type": "script", "lines": [{"who": "narr", "text": "开始了，{名}。"}, {"who": "alpha", "text": "你好。", "expr": "smile"}]}], "gives": ["k1"]},
+ "memory": {"alpha": "见到了{名}。"}, "player_note": "第一天。",
+ "outro": {"phases": [{"type": "script", "lines": [{"who": "narr", "text": "夜里。"}]}], "gives": ["k2"]}}

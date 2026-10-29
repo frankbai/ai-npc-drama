@@ -1,0 +1,1 @@
+{"rules": [{"who": "beta", "never": ["你就是凶手"]}, {"who": "player", "before": 2, "text": ["玉佩在井里"]}, {"who": "alpha", "before": 2, "text": ["第二章的心事"]}]}

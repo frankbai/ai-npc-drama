@@ -1,0 +1,19 @@
+{
+  "_说明": "防剧透检查规则，tools/check_content.py（以及 tests/test_content.py）会用。按章节、按 NPC 把自由对话时的提示词拼出来，检查不该出现的字有没有混进去。who：NPC 的 id，或 player（回复选项生成器拿到的玩家人设）。before：第几章之前不能出现。never：自由对话里永远不能出现（只有结局的揭晓台词可以用）。",
+  "rules": [
+    {"who": "yan_shouzheng", "never": ["你就是凶手", "下在顾青崖的茶里", "你在客栈后院截住他", "腊八夜的蒙面人是你"]},
+    {"who": "yan_shouzheng", "before": 3, "text": ["掌柜不简单"]},
+    {"who": "yan_shouzheng", "before": 4, "text": ["掌柜就是一刀雪"]},
+    {"who": "xie_bugui", "never": ["让他恨你", "七日寒", "严守正就是凶手"]},
+    {"who": "xie_bugui", "before": 5, "text": ["中毒", "下毒"]},
+    {"who": "xie_bugui", "before": 3, "text": ["长安"]},
+    {"who": "xie_bugui", "before": 5, "text": ["掌柜就是一刀雪"]},
+    {"who": "he_rendong", "never": ["让他恨你", "你就是凶手"]},
+    {"who": "he_rendong", "before": 4, "text": ["七日寒"]},
+    {"who": "he_rendong", "before": 5, "text": ["掌柜就是一刀雪", "掌柜是一刀雪"]},
+    {"who": "player", "before": 2, "text": ["右手刀"]},
+    {"who": "player", "before": 5, "text": ["七日寒"]},
+    {"who": "player", "before": 4, "text": ["长安"]},
+    {"who": "player", "before": 5, "text": ["让他恨你"]}
+  ]
+}

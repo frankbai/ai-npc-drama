@@ -1,0 +1,12 @@
+{
+  "title": "测试包",
+  "player": {"intro": "{名}，「{店名}」的主人。{ta}是个好人。",
+    "genders": [{"id": "f", "label": "女", "words": {"{ta}": "她"}}, {"id": "m", "label": "男", "words": {"{ta}": "他"}}],
+    "avatars": [{"id": "me_1", "label": "一", "mark": "一"}]},
+  "npcs": ["alpha", "beta"],
+  "budget": {"per_chapter": 4, "per_npc": 3},
+  "groups": [{"id": "经营", "limit": 1}, {"id": "意外", "limit": null}],
+  "vars": {"暴露": {"start": 0}},
+  "options": {"world_brief": "测试世界。"},
+  "rumors": {"template": "传言：「{1}」「{2}」「{3}」", "fillers": ["甲店", "乙店", "丙店"]}
+}

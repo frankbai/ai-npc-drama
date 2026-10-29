@@ -1,0 +1,7 @@
+{"n": 2, "season": "夏", "title": "二", "gap": "过了一天。", "final": true,
+ "npcs": {"alpha": {"stage": "熟了。"}, "beta": {"stage": "刚来。", "place": "门外", "arrive": "（{名}在屋里，你来到门外。）",
+   "notes": [{"if": {"clue": "k3"}, "text": "你知道玉佩的事。"}]}},
+ "cg": {"title": "二", "phases": [
+   {"type": "director", "npc": "alpha", "scene": "院子", "beats": ["打招呼"], "key_lines": [], "rounds": 1,
+    "variants": [{"if": {"trust": ["alpha", ">=", 50]}, "beats": ["高信任版本"], "gives": ["k3"]}, {"else": true, "beats": ["低信任版本"], "gives": ["k4"]}]},
+   {"type": "script", "lines": [{"who": "alpha", "slot": "s_alpha", "topics": ["井"], "instruction": "说一句"}]}]}}
